@@ -1,17 +1,26 @@
 <script>
-	import propertydata from "../lib/dummydata/properties.json"
 	import StackedList from "../components/StackedList.svelte";
-	
+	import { applyAction, enhance } from "$app/forms";
+
 	let searching = false
 	export let data;
 	export let form;
-
-	console.log("data ", data)
-	console.log("form ", form)
+	
+	let loading = false
+	let props
 </script>
 {#if !searching }
 <div class="container mx-auto px-4 py-4">
-<form action="?/search" method="post" class="w-full max-w-lg">
+<form action="?/search" use:enhance={() => {
+searching = true
+loading = true
+return async ({result}) => {
+ props = result.data
+ loading = false
+ await applyAction(result)
+};
+}}
+method="post" class="w-full center max-w-lg">
   <div class="flex flex-wrap -mx-3 mb-6">
     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
       <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="FIRST_NAME">
@@ -56,6 +65,11 @@
 </form>
 </div>
 {:else}
+{#if loading}
+<div class="absolute right-1/2 bottom-1/2  transform translate-x-1/2 translate-y-1/2 ">
+    <div class="border-t-transparent border-solid animate-spin  rounded-full border-blue-400 border-8 h-64 w-64"></div>
+</div>
+{:else}
 
 <div class="grid grid-cols-2 gap-4">
   <div class="m-2">
@@ -74,7 +88,7 @@
 </div>
 
 <ul role="list" class="divide-y divide-gray-100 m-5">
-{#each propertydata.features as property}
+{#each props as property}
 	<StackedList 
 	CONTACT={property.attributes.CONTACT} 
 	NUMERO_CATASTRO={property.attributes.NUM_CATASTRO} 
@@ -84,3 +98,14 @@
 {/each}
 </ul>
 {/if}
+{/if}
+
+<style>
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+}
+</style>
