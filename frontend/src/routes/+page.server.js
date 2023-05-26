@@ -38,7 +38,6 @@ export const actions = {
 	    }
 
 	    let whereStatement = filters.join(' AND ')
-
 	    const res = await fetch('http://localhost:3000/' + new URLSearchParams(whereStatement))
 	    const result = await res.json()
 
