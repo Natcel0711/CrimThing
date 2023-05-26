@@ -1,24 +1,65 @@
 <script>
-	import data from "../lib/dummydata/properties.json"
+	import propertydata from "../lib/dummydata/properties.json"
 	import StackedList from "../components/StackedList.svelte";
 	
-	let propertyFilter = {
-		Name: "",
-		Municipio: "",
-		NumeroCatastro: "",
-	}
-
 	let searching = false
+	export let data;
+	export let form;
+
+	console.log("data ", data)
+	console.log("form ", form)
 </script>
 {#if !searching }
-<div class="container mx-auto px-4">
-  <div>Bitch</div>
+<div class="container mx-auto px-4 py-4">
+<form action="?/search" method="post" class="w-full max-w-lg">
+  <div class="flex flex-wrap -mx-3 mb-6">
+    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="FIRST_NAME">
+        Nombre
+      </label>
+      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="FirstnameInput" type="text" placeholder="Juan" name="firstname">
+    </div>
+    <div class="w-full md:w-1/2 px-3">
+      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="LAST_NAME">
+        Apellido
+      </label>
+      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="ApellidoInput" type="text" placeholder="Del Pueblo" name="lastname">
+    </div>
+  </div>
+  <div class="flex flex-wrap -mx-3 mb-6">
+    <div class="w-full px-3">
+      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="NUMERO_CATASTRO">
+        Numero de catastro
+      </label>
+      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="NumCatastroInput" placeholder="Numero de catastro" name="catastro">
+    </div>
+  </div>
+  <div class="flex flex-wrap -mx-3 mb-6">
+    <div class="w-full px-3">
+      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="DIRECCION_FISICA">
+        Direcion fisica
+      </label>
+      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="DFisicaInput" placeholder="Direccion fisica" name="direccion_fisica">
+    </div>
+  </div>
+  <div class="flex flex-wrap -mx-3 mb-6">
+    <div class="w-full px-3">
+      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="DIRECCION_POSTAL">
+        Direcion postal
+      </label>
+      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="DFisicaInput" placeholder="Direccion Postal" name="direccion_postal">
+    </div>
+  </div>
+  <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+  Search
+</button>
+</form>
 </div>
 {:else}
 
 <div class="grid grid-cols-2 gap-4">
   <div class="m-2">
-  <a href="/" class="rounded-md bg-gray-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">Back</a>
+    <a on:click={()=>{ searching = false }} href="/" class="rounded-md bg-gray-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">Back</a>
   </div>
   <div>	
 <label class="relative block">
@@ -33,7 +74,7 @@
 </div>
 
 <ul role="list" class="divide-y divide-gray-100 m-5">
-{#each data.features as property}
+{#each propertydata.features as property}
 	<StackedList 
 	CONTACT={property.attributes.CONTACT} 
 	NUMERO_CATASTRO={property.attributes.NUM_CATASTRO} 
