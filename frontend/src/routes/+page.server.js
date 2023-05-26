@@ -15,32 +15,40 @@ export const actions = {
   	    const direccion_fisica = data.get("direccion_fisica")
 	    const direccion_postal = data.get("direccion_postal")
 		
-	    let filters = []
+	    let filters = {
+		firstname: "",
+		lastname: "",
+                catastro: "",
+		direccion_fisica: "",
+		direccion_postal: ""
+	    }
 
 	    if(nombre){
-		filters.push(`CONTACT LIKE '%${nombre}%'`)	
+		filters.firstname = nombre.toString().trim()	
 	    }
 
 	    if(apellido){
-		filters.push(`CONTACT LIKE '%${apellido}%'`)
+		filters.lastname = apellido.toString().trim()
 	    }
 
 	    if(catastro){
-		filters.push(`CATASTRO LIKE '%${catastro}%'`)
+		filters.catastro = catastro.toString().trim()
 	    }
 
 	    if(direccion_fisica){
-		filters.push(`DIRECCION_FISICA LIKE '%${direccion_fisica}%'`)
+		filters.direccion_fisica = direccion_fisica.toString().trim()
 	    }
 
 	    if(direccion_postal){
-		filters.push(`DIRECCION_POSTAL LIKE '%${direccion_postal}%'`)
+		filters.direccion_postal = direccion_postal.toString().trim()
 	    }
 
-	    let whereStatement = filters.join(' AND ')
-	    const res = await fetch('http://localhost:3000/' + new URLSearchParams(whereStatement))
+	    const res = await fetch('http://localhost:3000/', {
+		method: 'POST',
+		body: JSON.stringify(filters)
+	    })
 	    const result = await res.json()
-
-	    return result
+	    
+	    return result.features
     },
 };
