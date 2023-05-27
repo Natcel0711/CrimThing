@@ -13,5 +13,8 @@ func main() {
 	r.Use(middleware.Logger)
 	r.Post("/", handler.GetProperty)
 
-	http.ListenAndServe(":3000", r)
+	err := http.ListenAndServe(":3000", r)
+	if err != nil {
+		panic(err)
+	}
 }
